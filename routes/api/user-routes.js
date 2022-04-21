@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const { User, Wallet } = require("../../models/index");
-const { alphaCall } = require("../../util/alpha-vanatge");
 const { getUserTickers, calcUserMoney } = require("../../util/alpha-helpers");
 
 router.get("/", (req, res) => {

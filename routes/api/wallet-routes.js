@@ -40,7 +40,7 @@ router.put("/:id", (req, res) => {
     },
   })
     .then((updatedWallet) => {
-      if (!updatedWallet || !updatedWallet.length) {
+      if (!updatedWallet) {
         res.json({ message: "Wallet could not be found or updated" });
         return;
       }

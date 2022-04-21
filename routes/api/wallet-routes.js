@@ -21,7 +21,7 @@ router.post("/", (req, res) => {
     ...req.body,
   })
     .then((newWallet) => {
-      if (!newWallet || !newWallet.length) {
+      if (!newWallet) {
         res.json({ message: "New wallet could not be created" });
         return;
       }
@@ -40,7 +40,7 @@ router.put("/:id", (req, res) => {
     },
   })
     .then((updatedWallet) => {
-      if (!updatedWallet || !updatedWallet.length) {
+      if (!updatedWallet) {
         res.json({ message: "Wallet could not be found or updated" });
         return;
       }
@@ -50,6 +50,6 @@ router.put("/:id", (req, res) => {
       console.log(err);
       res.json(err);
     });
-}); //
+});
 
 module.exports = router;

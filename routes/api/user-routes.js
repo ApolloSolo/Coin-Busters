@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { User, Wallet } = require("../../models/index");
+const { getUserTickers, calcUserMoney } = require("../../util/alpha-helpers");
 
 router.get("/", (req, res) => {
   User.findAll({
@@ -12,36 +13,28 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
-  let dogeCoin = .19;
-  User.findOne({
+router.get("/:id", async (req, res) => {
+  let userData = await User.findOne({
     attributes: { exclude: ["password"] },
     where: {
       id: req.params.id,
     },
     include: [
       {
-        model: Wallet
-      }
-    ]
-  })
-    .then((userData) => {
-      if (!userData) {
-        res.status(404).json({ message: "No user found by that id" });
-        return;
-      }
+        model: Wallet,
+        attributes: ["btc", "eth", "ltc", "atom", "doge"],
+      },
+    ],
+  });
+  if (!userData) {
+    res.status(404).json({ message: "No user found by that id" });
+    return;
+  }
 
-      // Calc player money based on wallet inventory
+  const userCoinTickers = await getUserTickers(userData.wallet.dataValues);
 
-      userData.money = userData.money * userData.wallet.doge * dogeCoin
-      
-      // Calc player money based on wallet inventory
-      res.json(userData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json(err);
-    });
+  userData = await calcUserMoney(userCoinTickers, userData);
+  res.json(userData);
 });
 
 router.post("/", (req, res) => {

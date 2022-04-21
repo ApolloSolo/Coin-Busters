@@ -35,6 +35,10 @@ User.init(
         len: [4],
       },
     },
+    money: {
+      type: DataTypes.DECIMAL(12, 4),
+      allowNull: false,
+    }
   },
   {
     hooks: {
@@ -51,6 +55,7 @@ User.init(
     timestamps: false,
     freezeTableName: true,
     underscored: true,
+    timestamps: true,
     modelName: "user",
   }
 );

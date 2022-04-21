@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User } = require("../../models/index");
+const { User, Wallet } = require("../../models/index");
 
 router.get("/", (req, res) => {
   User.findAll({
@@ -13,17 +13,29 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+  let dogeCoin = .19;
   User.findOne({
     attributes: { exclude: ["password"] },
     where: {
       id: req.params.id,
     },
+    include: [
+      {
+        model: Wallet
+      }
+    ]
   })
     .then((userData) => {
       if (!userData) {
         res.status(404).json({ message: "No user found by that id" });
         return;
       }
+
+      // Calc player money based on wallet inventory
+
+      userData.money = userData.money * userData.wallet.doge * dogeCoin
+      
+      // Calc player money based on wallet inventory
       res.json(userData);
     })
     .catch((err) => {
@@ -37,6 +49,7 @@ router.post("/", (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
+    money: req.body.money,
   })
     .then((userData) => res.json(userData))
     .catch((err) => {
@@ -46,28 +59,27 @@ router.post("/", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-    User.findOne({
-        where: {
-            email: req.body.email
-        }
-    })
-    .then((userData) => {
-        if(!userData) {
-            res.status(404).json({ message: "User email not found" })
-            return;
-        }
-        const validPassword = userData.checkPassword(req.body.password);
-        if(!validPassword) {
-            res.status(400).json({ message: "Incorrect password!" });
-            return;
-        }
-        res.json({ user: userData, message: "You have logged in!" })
-    })
-})
+  User.findOne({
+    where: {
+      email: req.body.email,
+    },
+  }).then((userData) => {
+    if (!userData) {
+      res.status(404).json({ message: "User email not found" });
+      return;
+    }
+    const validPassword = userData.checkPassword(req.body.password);
+    if (!validPassword) {
+      res.status(400).json({ message: "Incorrect password!" });
+      return;
+    }
+    res.json({ user: userData, message: "You have logged in!" });
+  });
+});
 
 router.put("/:id", (req, res) => {
   User.update(req.body, {
-      individualHooks: true,
+    individualHooks: true,
     where: {
       id: req.params.id,
     },

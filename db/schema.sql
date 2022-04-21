@@ -1,3 +1,3 @@
-DROP DATABASE IF EXISTS login_demo;
+DROP DATABASE IF EXISTS coin_busters;
 
-CREATE DATABASE login_demo;
+CREATE DATABASE coin_busters;

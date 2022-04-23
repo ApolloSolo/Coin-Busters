@@ -45,6 +45,6 @@ router.get("/dashboard", withAuth, async (req, res) => {
 
 router.get('/buy', withAuth, async (req, res) => {
   res.render('buy');
-})
+});
 
 module.exports = router;

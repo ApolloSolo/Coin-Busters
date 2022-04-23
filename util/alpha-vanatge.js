@@ -1,5 +1,5 @@
 const axios = require("axios");
-require('dotenv').config();
+require("dotenv").config();
 
 const options = {
   method: "GET",
@@ -17,4 +17,4 @@ async function alphaCall(ticker) {
   return coinData;
 }
 
-module.exports = {alphaCall};
+module.exports = { alphaCall };

@@ -17,6 +17,7 @@ async function getUserTickers(obj) {
       let coinPrice =
       coinData.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
       obj.money = parseFloat(obj.money) + parseFloat(obj.wallet.dataValues[array[i]]) * parseFloat(coinPrice);
+      obj.money = "$ " + obj.money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     return obj;
   } 

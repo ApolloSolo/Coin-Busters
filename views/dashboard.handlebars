@@ -1,0 +1,22 @@
+<div class="card mt-4" style="width: 18rem;">
+    <div class="avatar">
+        <img id="avatar" src="/svg/user-astronaut-solid.svg" class="card-img-top" alt="User avatar astronaut">
+    </div>
+  <div class="card-body">
+    <h5 class="card-title">Hello, {{userData.username}}</h5>
+    <p class="card-text">Manage your assets and grow rich!</p>
+    <h5>Current Valuation</h5>
+    <h6>{{userData.money}}</h6>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Bitcoin {{userData.wallet.btc}}</li>
+    <li class="list-group-item">Ethereum {{userData.wallet.eth}}</li>
+    <li class="list-group-item">Litecoin {{userData.wallet.ltc}}</li>
+    <li class="list-group-item">Cosmos {{userData.wallet.atom}}</li>
+    <li class="list-group-item">Doge {{userData.wallet.doge}}</li>
+  </ul>
+  <div class="card-body">
+    <a href="/buy" class="card-link">Buy Coins</a>
+    <a href="/sell" class="card-link">Sell Coins</a>
+  </div>
+</div>

@@ -44,7 +44,20 @@ router.get("/dashboard", withAuth, async (req, res) => {
 });
 
 router.get('/buy', withAuth, async (req, res) => {
-  res.render('buy');
+  let userData = await User.findOne({
+    attributes: { exclude: ["password"] },
+    where: {
+      id: req.session.user_id,
+    },
+    include: [
+      {
+        model: Wallet,
+        attributes: ["btc", "eth", "ltc", "atom", "doge"],
+      },
+    ],
+  });
+  userData = await userData.get({ plain: true });
+  res.render('buy', { userData });
 });
 
 module.exports = router;

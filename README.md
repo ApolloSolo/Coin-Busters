@@ -11,7 +11,7 @@
 ## License
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ## Description
-Coin-Busters (deployed on Heroku) is a risk-free cryptocurrency trading simulator. Coin-Busters utilizes the Alpha-Vantage’s free tier API. Alpha-Vantage provides financial market data on stocks, forex (FX), and cryptocurrencies/digital currencies. Please use the default login credentials to demo the simulator. However, feel free to register your own account.   
+[Coin-Busters](https://agile-savannah-38692.herokuapp.com/) (deployed on Heroku) is a risk-free cryptocurrency trading simulator. Coin-Busters utilizes the Alpha-Vantage’s free tier API. Alpha-Vantage provides financial market data on stocks, forex (FX), and cryptocurrencies/digital currencies. Please use the default login credentials to demo the simulator. However, feel free to register your own account.   
 ## Usage
 Coin-Busters is currently limited to 5 API calls per minute. If this limit is exceeded, kick back and relax for 60 seconds 😊 
 ## Contributing
@@ -23,3 +23,4 @@ Testing methods have not been established at this time.
 ## E-mail
 appsolo.tech@gmail.com
 ## Link
+[Coin-Busters](https://agile-savannah-38692.herokuapp.com/)

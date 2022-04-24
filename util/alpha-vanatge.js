@@ -4,8 +4,8 @@ require("dotenv").config();
 const options = {
   method: "GET",
   headers: {
-    "X-RapidAPI-Host": "alpha-vantage.p.rapidapi.com",
-    "X-RapidAPI-Key": "e7d9710815msh122213a08c14487p1d2ed7jsnfcc325940b79",
+    "X-RapidAPI-Host": process.env.API_HOST,
+    "X-RapidAPI-Key": process.env.SECRET_KEY,
   },
 };
 

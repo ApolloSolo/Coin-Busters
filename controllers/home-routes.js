@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
 
 router.get("/login", (req, res) => {
   if (req.session.loggedIn) {
-    res.redirect("/");
+    res.redirect("/dashboard");
     return;
   }
   res.render("login-register");
@@ -57,7 +57,7 @@ router.get('/buy', withAuth, async (req, res) => {
     ],
   });
   userData = await userData.get({ plain: true });
-  res.render('buy', { userData });
+  res.render('buy', { userData, loggedIn: req.session.loggedIn });
 });
 
 module.exports = router;

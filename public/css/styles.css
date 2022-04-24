@@ -1,9 +1,42 @@
+:root {
+    --primary-bg-color: rgba(53, 53, 53, 0.945);
+    --primary-font-color: azure;
+}
+
+body{
+    background-color: var(--primary-bg-color);
+    color: var(--primary-font-color);
+    height: calc(100vh - 56px);
+}
+
 #avatar{
     width: 75px;
     height: auto;
+    filter: invert(90%) sepia(29%) saturate(1476%) hue-rotate(86deg) brightness(118%) contrast(119%);
 }
 
 .avatar{
     padding-top: .5rem;
     margin: 0 auto;
+}
+
+.welcome-img {
+    border-radius: .25rem;
+}
+
+#welcome {
+    font-size: large;
+}
+
+a {
+    color: rgb(255, 255, 255);
+}
+
+#dash {
+    background-color: rgb(49, 49, 49);
+}
+
+#dash ul li{
+    background-color: rgb(94, 94, 94);
+    color: var(--primary-font-color);
 }

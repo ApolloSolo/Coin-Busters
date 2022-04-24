@@ -34,16 +34,23 @@ router.get("/dashboard", withAuth, async (req, res) => {
     return;
   }
 
+  const currentFunds = await userData.money;
+
   const userCoinTickers = await getUserTickers(userData.wallet.dataValues);
- // userCoinTickers = await userCoinTickers.get({})
+  // userCoinTickers = await userCoinTickers.get({})
   userData = await calcUserMoney(userCoinTickers, userData);
   userData = await userData.get({ plain: true });
   //res.json(userData);
 
-  res.render("dashboard", { loggedIn: req.session.loggedIn, userData, userCoinTickers });
+  res.render("dashboard", {
+    loggedIn: req.session.loggedIn,
+    userData,
+    userCoinTickers,
+    currentFunds,
+  });
 });
 
-router.get('/buy', withAuth, async (req, res) => {
+router.get("/buy", withAuth, async (req, res) => {
   let userData = await User.findOne({
     attributes: { exclude: ["password"] },
     where: {
@@ -57,7 +64,24 @@ router.get('/buy', withAuth, async (req, res) => {
     ],
   });
   userData = await userData.get({ plain: true });
-  res.render('buy', { userData, loggedIn: req.session.loggedIn });
+  res.render("buy", { userData, loggedIn: req.session.loggedIn });
+});
+
+router.get("/sell", withAuth, async (req, res) => {
+  let userData = await User.findOne({
+    attributes: { exclude: ["password"] },
+    where: {
+      id: req.session.user_id,
+    },
+    include: [
+      {
+        model: Wallet,
+        attributes: ["btc", "eth", "ltc", "atom", "doge"],
+      },
+    ],
+  });
+  userData = await userData.get({ plain: true });
+  res.render("sell", { userData, loggedIn: req.session.loggedIn });
 });
 
 module.exports = router;

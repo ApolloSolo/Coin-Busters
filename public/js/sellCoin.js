@@ -1,3 +1,12 @@
+async function defaultAmount() {
+  let coin = document.getElementById("coinSelect");
+  let coinTicker = coin.options[coin.selectedIndex].value;
+  let currentQuantity = coin.options[coin.selectedIndex].dataset.userquantity;
+  let quantity = document.getElementById("quantity");
+  quantity.value = currentQuantity;
+  console.log(currentQuantity);
+}
+
 async function calcCoinCost() {
   let coin = document.getElementById("coinSelect");
   let coinValue = coin.options[coin.selectedIndex].value;
@@ -18,37 +27,29 @@ async function calcCoinCost() {
       res.json().then((data) => {
         let price = data["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
         price = parseFloat(price);
-        console.log(quantity * price);
-        if (userFunds < quantity * price) {
-          total.value = "Not enough funds";
-        } else {
-          buyBtn.classList.remove("disabled");
-          total.value = quantity * price;
-        }
+        buyBtn.classList.remove("disabled");
+        total.value = quantity * price;
       });
     }
   });
 }
 
-async function buyCoins(event) {
+async function sellCoins(event) {
   event.preventDefault();
 
   let userFunds = document.getElementById("userFunds").innerText;
   userFunds = parseFloat(userFunds);
-  let buyQuantity = document.getElementById("quantity").value;
-  buyQuantity = parseFloat(buyQuantity);
+  let sellQuantity = document.getElementById("quantity").value;
+  sellQuantity = parseFloat(sellQuantity);
   let coin = document.getElementById("coinSelect");
   let currentQuantity = coin.options[coin.selectedIndex].dataset.userquantity;
   currentQuantity = parseFloat(currentQuantity);
   let coinTicker = coin.options[coin.selectedIndex].value;
-  let buyPrice = document.getElementById("total").value;
+  let sellPrice = document.getElementById("total").value;
   const userID = document.getElementById("userFunds").dataset.id;
-  buyPrice = parseFloat(buyPrice);
-  let total = buyQuantity + currentQuantity;
-  let cost = userFunds - buyPrice;
-  console.log(cost);
-  console.log(userFunds);
-  console.log(buyPrice);
+  sellPrice = parseFloat(sellPrice);
+  let total = currentQuantity - sellQuantity;
+  let sumOfSell = userFunds + sellPrice;
 
   let putCoin = {};
 
@@ -89,7 +90,7 @@ async function buyCoins(event) {
   const userUpdate = await fetch(`/api/users/${userID}`, {
     method: "PUT",
     body: JSON.stringify({
-      money: userFunds - buyPrice,
+      money: sumOfSell,
     }),
     headers: {
       "Content-Type": "application/json",
@@ -98,9 +99,10 @@ async function buyCoins(event) {
   if (userUpdate.ok) {
     document.location.replace("/dashboard");
   } else {
-    alert(userUpdate.statusText);
+    alert(response.statusText);
   }
 }
 
+document.querySelector("#coinSelect").addEventListener("change", defaultAmount);
 document.querySelector("#quantity").addEventListener("blur", calcCoinCost);
-document.querySelector("#buyForm").addEventListener("submit", buyCoins);
+document.querySelector("#buyForm").addEventListener("submit", sellCoins);

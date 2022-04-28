@@ -40,3 +40,8 @@ a {
     background-color: rgb(94, 94, 94);
     color: var(--primary-font-color);
 }
+
+.welcome-img {
+    width: 100%;
+    height: auto;
+}

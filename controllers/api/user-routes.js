@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { User, Wallet } = require("../../models/index");
 const { getUserTickers, calcUserMoney } = require("../../util/alpha-helpers");
+const catchAsync = require("../../util/catchAsync");
 const startingFunds = 10000;
 
 router.get("/", (req, res) => {
@@ -14,53 +15,59 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", async (req, res) => {
-  let userData = await User.findOne({
-    attributes: { exclude: ["password"] },
-    where: {
-      id: req.params.id,
-    },
-    include: [
-      {
-        model: Wallet,
-        attributes: ["btc", "eth", "ltc", "atom", "doge"],
+router.get(
+  "/:id",
+  catchAsync(async (req, res) => {
+    let userData = await User.findOne({
+      attributes: { exclude: ["password"] },
+      where: {
+        id: req.params.id,
       },
-    ],
-  });
-  if (!userData) {
-    res.status(404).json({ message: "No user found by that id" });
-    return;
-  }
+      include: [
+        {
+          model: Wallet,
+          attributes: ["btc", "eth", "ltc", "atom", "doge"],
+        },
+      ],
+    });
+    if (!userData) {
+      res.status(404).json({ message: "No user found by that id" });
+      return;
+    }
 
-  const userCoinTickers = await getUserTickers(userData.wallet.dataValues);
+    const userCoinTickers = await getUserTickers(userData.wallet.dataValues);
 
-  userData = await calcUserMoney(userCoinTickers, userData);
-  res.json(userData);
-});
+    userData = await calcUserMoney(userCoinTickers, userData);
+    res.json(userData);
+  })
+);
 
 //create user
-router.post("/", async (req, res) => {
-  let newUser = await User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    money: startingFunds,
-  });
-  let newWallet = await Wallet.create({
-    user_id: newUser.id,
-    btc: 0,
-    eth: 0,
-    ltc: 0,
-    atom: 0,
-    doge: 50,
-  });
-  req.session.save(() => {
-    req.session.user_id = newUser.id;
-    req.session.username = newUser.username;
-    req.session.loggedIn = true;
-  });
-  res.json([newUser, newWallet]);
-});
+router.post(
+  "/",
+  catchAsync(async (req, res) => {
+    let newUser = await User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      money: startingFunds,
+    });
+    let newWallet = await Wallet.create({
+      user_id: newUser.id,
+      btc: 0,
+      eth: 0,
+      ltc: 0,
+      atom: 0,
+      doge: 50,
+    });
+    req.session.save(() => {
+      req.session.user_id = newUser.id;
+      req.session.username = newUser.username;
+      req.session.loggedIn = true;
+    });
+    res.json([newUser, newWallet]);
+  })
+);
 
 // log in
 router.post("/login", (req, res) => {
@@ -89,13 +96,12 @@ router.post("/login", (req, res) => {
   });
 });
 
-router.post('/logout', (req, res) => {
+router.post("/logout", (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy(() => {
       res.status(204).end();
     });
-  }
-  else {
+  } else {
     res.status(404).end();
   }
 });

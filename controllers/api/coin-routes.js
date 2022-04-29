@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const { alphaCall } = require("../../util/alpha-vanatge");
+const catchAsync = require("../../util/catchAsync");
 
-router.get("/:ticker", async (req, res) => {
-
-    const coinData = await(alphaCall(req.params.ticker));
-    let coinPrice =
-      coinData.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
-    res.json(coinData.data)
-});
+router.get(
+  "/:ticker",
+  catchAsync(async (req, res) => {
+    const coinData = await alphaCall(req.params.ticker);
+    res.json(coinData.data);
+  })
+);
 
 module.exports = router;

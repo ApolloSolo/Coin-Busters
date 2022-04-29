@@ -1,6 +1,5 @@
 async function defaultAmount() {
   let coin = document.getElementById("coinSelect");
-  let coinTicker = coin.options[coin.selectedIndex].value;
   let currentQuantity = coin.options[coin.selectedIndex].dataset.userquantity;
   let quantity = document.getElementById("quantity");
   quantity.value = currentQuantity;
